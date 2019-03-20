@@ -4,7 +4,9 @@
         "pages/logs/main",
         "pages/my/main",
         "pages/cart/main",
-        "pages/search/main"
+        "pages/search/main",
+        "pages/goodlist/main",
+        "pages/details/main"
     ],
     "window": {
         "backgroundTextStyle": "light",
@@ -41,6 +43,7 @@
                 "iconPath": "static/tabs/tab_my_nor@3x.png",
                 "selectedIconPath": "static/tabs/tab_my_fill@3x.png"
             }
+
         ],
 
 

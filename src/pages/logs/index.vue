@@ -1,61 +1,114 @@
 <template>
-  <div>
-      <swiper v-if="imgUrls.length > 0" indidator-dots="imgUrls.length > 1" >
-      <block v-for="(item, index) in imgUrls" :key="index" >
-        <swiper-item>
-          <image :src="item" mode="scaleToFill"></image>
-        </swiper-item>
+<view>
+  <seach></seach>
+  <view class="crte">
+    <scroll-view scroll-y class="crte-left">
+      <block v-for="(item,index) in cate" :key="index">
+      <view class="title" :class="{active:index===tabIndex}" @tap="cut(index)">
+        {{item.cat_name}}
+      </view>
       </block>
-    </swiper>
-
-    <ul class="container log-list">
-      <li v-for="(log, index) in logs" :class="{ red: aa }" :key="index" class="log-item">
-        <card :text="(index + 1) + ' . ' + log"></card>
-      </li>
-    </ul>
-  </div>
+    </scroll-view>
+     <scroll-view scroll-y class="crte-right">
+       <block v-for="(item,index) in rightlist" :key="index">
+       <view class="right-title">{{item.cat_name}}</view>
+       <view class="right-shangping">
+         <block v-for="(subitem,subindex) in item.children" :key="subindex">
+       <view class="right-list" @tap="goodList(subitem.cat_name)"> 
+         <image :src="subitem.cat_icon"></image>
+         <view>{{subitem.cat_name}}</view>
+       </view>
+         </block>
+       </view>
+      </block>
+     </scroll-view>
+  </view>
+  </view>
 </template>
 
 <script>
-import { formatTime } from '@/utils/index'
-import card from '@/components/card'
-
+//引入主件
+import Seach from "../../components/seach";
+import request from "../../utils/request.js"
 export default {
-  components: {
-    card
-  },
-
-  data () {
-    return {
-      logs: [],
-      imgUrls: [
-        'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/newsPicture/05558951-de60-49fb-b674-dd906c8897a6',
-        'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/coursePicture/0fbcfdf7-0040-4692-8f84-78bb21f3395d',
-        'http://mss.sankuai.com/v1/mss_51a7233366a4427fa6132a6ce72dbe54/management-school-picture/7683b32e-4e44-4b2f-9c03-c21f34320870'
-      ]
-    }
-  },
-
-  created () {
-    let logs
-    if (mpvuePlatform === 'my') {
-      logs = mpvue.getStorageSync({key: 'logs'}).data || []
-    } else {
-      logs = mpvue.getStorageSync('logs') || []
-    }
-    this.logs = logs.map(log => formatTime(new Date(log)))
+data () {
+  return {
+      tabIndex:0,
+      cate:[],
+      rightlist:[]
   }
+},
+onLoad(){
+  wx.showLoading({
+    title: '努力加载中', //提示的内容,
+    mask: true, //显示透明蒙层，防止触摸穿透,
+  });
+  request.get("categories").then(res=>{
+    this.cate=res.data.message;
+    this.rightlist=this.cate[this.tabIndex].children;
+   wx.hideLoading();
+  })
+},
+//注册组件
+components: {
+  Seach
+},
+methods: {
+   cut(index){
+    this.tabIndex=index;
+     this.rightlist=this.cate[this.tabIndex].children;
+   },
+   goodList(name){
+     wx.navigateTo({ url: '/pages/goodlist/main'+'?keyword='+name });
+   }
+}
 }
 </script>
 
 <style>
-.log-list {
+.crte{
+  position: fixed;
+  top: 100rpx;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  
   display: flex;
-  flex-direction: column;
-  padding: 40rpx;
 }
+.crte-left{
+  width: 200rpx;
+  height: 100%;
+  background-color: #f4f4f4;
+}
+.title{
+  height: 88rpx;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  line-height:88rpx;
 
-.log-item {
-  margin: 10rpx;
+}
+.crte-left .title.active{
+  background-color: #fff;
+  color: red;
+}
+.crte-right{
+  flex: 1;
+  /* background-color: red; */
+}
+.right-list image{
+  width: 120rpx;
+  height: 120rpx;
+}
+.right-list{
+  width: 33.3%;
+  font-size: 30rpx;
+}
+.right-shangping{
+  display: flex;
+  flex-wrap: wrap;
+}
+.right-title{
+  text-align: center;
+  padding: 40rpx 0;
 }
 </style>

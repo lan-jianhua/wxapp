@@ -1,12 +1,6 @@
 <template>
  <view>
-   <!-- //搜索框 -->
-   <navigator url="/pages/search/main" class="search">
-   <view class="search-in">
-     <icon class="search-icon" type="search" size="32rpx"></icon>
-     搜索
-   </view>
-   </navigator>
+<seach></seach>
    <!-- 轮播图 -->
    <swiper
   indicator-dots
@@ -16,135 +10,98 @@
 >
   <block v-for="(item,index) in imgUrls" :key="index">
     <swiper-item>
-      <image :src="item" class="slide-image" width="355" height="150" />
+      <image :src="item.image_src" class="slide-image" width="355" height="150" />
     </swiper-item>
   </block>
 </swiper>
 <view class="cate">
   <block v-for="(item,index) in cate" :key="index">
-    <image :src="item">
+    <image :src="item.image_src">
 
     </image>
   </block>
 </view>
-<!-- 分割盒子 -->
-<view class="box">
 
-</view>
- <view class="floor">
-    <view class="floor-title">
-      <image src="https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor01_title.png" mode="widthFix">
-      </image>
-    </view>
-    <view class="floor-body">
-      <view class="floor-left">
-        <image src="https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor01_1@2x.png"></image>
-      </view>
-      <view class="floor-right">
-       <block v-for="(item,index) in floorRight" :key="index">
-          <image :src="item"></image>
-       </block>
-      </view>
-    </view>
- </view>
- <!-- 户外运动商品 -->
-<view class="box">
-
-</view>
- <view class="floor">
-    <view class="floor-title">
-      <image src="https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor02_title.png" mode="widthFix">
-      </image>
-    </view>
-    <view class="floor-body">
-      <view class="floor-left">
-        <image src="https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor02_1@2x.png"></image>
-      </view>
-      <view class="floor-right">
-       <block v-for="(item,index) in floorRight1" :key="index">
-          <image :src="item"></image>
-       </block>
-      </view>
-    </view>
- </view>
  <!-- //包包商品 -->
+ <block v-for="(item1,index1) in floortitle" :key="index1">
  <view class="box">
-
 </view>
  <view class="floor">
     <view class="floor-title">
-      <image src="https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor03_title.png" mode="widthFix">
+      <image :src="item1.floor_title.image_src" mode="widthFix">
       </image>
     </view>
     <view class="floor-body">
       <view class="floor-left">
-        <image src="https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor03_1@2x.png"></image>
+        <image :src="item1.product_list[0].image_src"></image>
       </view>
       <view class="floor-right">
-       <block v-for="(item,index) in floorRight2" :key="index">
-          <image :src="item"></image>
+       <block v-for="(item,index) in item1.product_list" :key="index">
+          <image v-if="index!=0" :src="item1.product_list[index].image_src"></image>
        </block>
       </view>
     </view>
  </view>
+ </block>
  </view>
 </template>
 
 <script>
+import Seach from "../../components/seach"
 export default {
   data () {
     return {
-       imgUrls: [
-      'https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/banner1.png',
-      'https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/banner2.png',
-      'https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/banner3.png'
-    ],
+    //    imgUrls: [
+    //   // 'https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/banner1.png',
+    //   // 'https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/banner2.png',
+    //   // 'https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/banner3.png'
+    // ],
+    imgUrls:[],
     cate:[
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_4@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_3@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_2@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_1@2x.png"
+      // "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_4@2x.png",
+      // "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_3@2x.png",
+      // "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_2@2x.png",
+      // "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/icon_index_nav_1@2x.png"
     ],
-    floorRight:[
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor01_2@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor01_3@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor01_4@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor01_5@2x.png"
-    ],
-    floorRight1:[
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor02_2@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor02_3@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor02_4@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor02_5@2x.png"
-    ],
-    floorRight2:[
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor03_2@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor03_3@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor03_4@2x.png",
-      "https://lg-igjc8p1o-1256763078.cos.ap-shanghai.myqcloud.com/upload/pic_floor03_5@2x.png"
-    ]
+    floortitle:[],
+    floorRight:[]
     }
+  },
+  components: {
+    Seach
+  },
+  onLoad(){
+  wx.request({
+    url: "https://autumnfish.cn/wx/api/public/v1/home/swiperdata", //开发者服务器接口地址",
+    method: 'GET',
+    success: res => {
+      console.log(res)
+      this.imgUrls=res.data.message
+    },
+  });
+  wx.request({
+    url: 'https://www.zhengzhicheng.cn/api/public/v1/home/catitems', //开发者服务器接口地址",
+    success: res => {
+      console.log(res)
+      this.cate=res.data.message
+    },
+  });
+  //请求楼层数据
+  wx.request({
+    url: 'https://www.zhengzhicheng.cn/api/public/v1/home/floordata', //开发者服务器接口地址",
+    method: 'GET',
+    success: res => {
+      console.log(res)
+      this.floortitle=res.data.message;
+    },
+
+  });
   }
 }
 </script>
 
 <style>
-.search{
-  background-color: #eb4450;
-  padding: 20rpx;
-}
-.search-in{
-  height: 60rpx;
-  background-color: #fff;
-  border-radius: 10rpx; 
-  color:#666;
-  font-size: 30rpx;
-  /* text-align: center;
-  line-height: 60rpx; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 /* 轮播图部分 */
 swiper-item image{
   width: 750rpx;
@@ -161,7 +118,7 @@ swiper{
 }
 .cate image{
   width: 128rpx;
-  height: 140rpx;
+  height: 110rpx;
 }
 .box{
   height: 20rpx;
